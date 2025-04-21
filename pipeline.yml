@@ -1,0 +1,81 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  buildConfiguration: 'Release'
+  dotnetOutput: '$(Build.ArtifactStagingDirectory)/output'
+  uxOutput: '$(Build.ArtifactStagingDirectory)/ux'
+
+steps:
+
+# 1. Setup .NET
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '8.x.x'
+    installationPath: $(Agent.ToolsDirectory)/dotnet
+
+# 2. Restore & Build .NET (excluding UX)
+- script: dotnet restore MC.DD.sln
+  displayName: 'Restore .NET dependencies'
+
+- script: dotnet build MC.DD.sln -c $(buildConfiguration) --no-restore
+  displayName: 'Build .NET projects'
+
+# 3. Test Project
+- script: dotnet test MC.DD/TestProject/TestProject.csproj --logger "trx" --results-directory $(Build.ArtifactStagingDirectory)/test-results
+  displayName: 'Run tests'
+
+- task: PublishTestResults@2
+  inputs:
+    testResultsFormat: 'VSTest'
+    testResultsFiles: '**/*.trx'
+    searchFolder: '$(Build.ArtifactStagingDirectory)/test-results'
+  condition: succeededOrFailed()
+
+# 4. Publish .NET outputs
+- script: |
+    dotnet publish MC.DD/Api/Api.csproj -c $(buildConfiguration) -o $(dotnetOutput)/Api
+    dotnet publish MC.DD/Common/Common.csproj -c $(buildConfiguration) -o $(dotnetOutput)/Common
+    dotnet publish MC.DD/Services/Services.csproj -c $(buildConfiguration) -o $(dotnetOutput)/Services
+    dotnet publish MC.DD/Persistence/Persistence.csproj -c $(buildConfiguration) -o $(dotnetOutput)/Persistence
+  displayName: 'Publish .NET Projects'
+
+# 5. Build React App (UX)
+- task: NodeTool@0
+  inputs:
+    versionSpec: '18.x' # adjust based on your project
+  displayName: 'Install Node.js'
+
+- script: |
+    cd MC.DD/UX
+    npm install
+    npm run build
+  displayName: 'Build React App'
+
+# 6. Copy UX build to artifact folder
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: 'MC.DD/UX/build'  # or 'dist' based on your build config
+    Contents: '**'
+    TargetFolder: '$(uxOutput)'
+  displayName: 'Copy UX Build Output'
+
+# 7. Zip All Artifacts (optional)
+- task: ArchiveFiles@2
+  inputs:
+    rootFolderOrFile: '$(Build.ArtifactStagingDirectory)'
+    includeRootFolder: false
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/build-artifacts.zip'
+    replaceExistingArchive: true
+
+# 8. Publish Build Artifacts
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'app-artifacts'
+    publishLocation: 'Container'

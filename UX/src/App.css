@@ -1,0 +1,7 @@
+
+ 
+.accordion-button:focus { 
+    border-color: transparent;
+    box-shadow: none;
+    outline: none;
+}
