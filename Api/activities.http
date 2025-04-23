@@ -19,15 +19,16 @@ Content-Type: application/json
 }
 
 ###
-PUT {{baseUrl}}/activity/81272612-3155-4476-a90c-7e2183c3bdeb
+PUT {{baseUrl}}/activity/bd036630-3108-402d-b59a-d4e71522ac17
 Content-Type: application/json
 
-{ 
-  "name": "saeed5",
-  "fromAddress": "sender5@example.com",
-  "toEmailAddress": "user5@example.com",
-  "fromName": "Campaign5",
-  "openedDate" :  "2025-04-20T11:11:25.007283"
+{
+  "name":"Saeed Suleiman",
+  "fromAddress":"test@test2.com",
+  "toEmailAddress":"test@test.com",
+  "fromName":"Saeed",
+  "openedDate":"2025-04-23T21:30:00.000Z",
+  "bouncedDate":"2025-04-22T20:00:00.000Z"
 }
 
 ###

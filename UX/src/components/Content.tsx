@@ -1,13 +1,12 @@
-import React from 'react';
-import Activities from './Activities';
+import React from 'react';  
+
 
 const Content: React.FC = () => {
     return (
         <main className="container py-4">  
 
-          
-         <Activities/>
-
+           
+      
         </main>
     );
 };

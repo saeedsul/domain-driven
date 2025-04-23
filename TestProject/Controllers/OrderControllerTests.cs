@@ -165,11 +165,10 @@ namespace TestProject.Controllers
         public async Task UpdateOrder_NonExistingOrder_Should_ReturnsNotFound()
         {
             // Arrange 
-            var updateOrderDto = _fixture.Create<UpdateOrderDto>();
-            UpdateOrderDto updatedOrderDto = null;
+            var updateOrderDto = _fixture.Create<UpdateOrderDto>(); 
 
             _mockService.Setup(service => service.UpdateOrder(updateOrderDto))
-                             .ReturnsAsync((OrderDto)null);
+                             .ReturnsAsync(value: null);
 
             // Act
             var result = await _sut.UpdateOrder(updateOrderDto);

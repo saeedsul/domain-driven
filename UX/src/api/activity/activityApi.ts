@@ -1,4 +1,4 @@
-import axios from "../axiosInstance";
+import axios from "../../utils/axiosInstance";
 
 export interface Activity {
     id: string;
@@ -12,21 +12,38 @@ export interface Activity {
     sentDate: string;
 }
 
+export interface AddActivityI { 
+    name: string;
+    fromAddress: string;
+    toEmailAddress: string;
+    fromName: string; 
+}
+export interface UpdateActivityI {
+    id: string;
+    name: string;
+    fromAddress: string;
+    toEmailAddress: string;
+    fromName: string;
+    openedDate?: string | null;
+    bouncedDate?: string | null;
+}
+
+
 export const getAllActivities = async (): Promise<Activity[]> => {
     const response = await axios.get("/Activity/get-all-activities");
     return response.data;
 };
 
-export const createActivity = async (activity: Omit<Activity, "id">): Promise<Activity> => {
+export const create = async (activity: AddActivityI): Promise<AddActivityI> => {
     const response = await axios.post("/Activity/create-activity", activity);
     return response.data;
 };
 
-export const updateActivity = async (id: number, activity: Activity): Promise<Activity> => {
-    const response = await axios.put(`/Activity/UpdateActivity/${id}`, activity);
+export const update = async (id: string, activity: UpdateActivityI): Promise<UpdateActivityI> => {
+    const response = await axios.put(`/Activity/${id}`, activity);
     return response.data;
 };
 
-export const deleteActivity = async (id: number): Promise<void> => {
-    await axios.delete(`/Activity/DeleteActivity/${id}`);
+export const deleteActivity = async (id: string): Promise<void> => {
+    await axios.delete(`/Activity/${id}`);
 };
