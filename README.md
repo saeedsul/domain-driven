@@ -113,7 +113,11 @@ docker run -p 5118:5118 domain-driven-api
   ```
 
 ---
- 
+
+## UX React application
+- A react application to serve the front end 
+- npm run build
+- npm run dev
 
 ## For HTTP File Execution
 More about HTTP files: [https://aka.ms/vs/httpfile](https://aka.ms/vs/httpfile)
