@@ -1,20 +1,124 @@
-# Introduction 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
 
-# Getting Started
-TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
-1.	Installation process
-2.	Software dependencies
-3.	Latest releases
-4.	API references
+# Domain Driven API
 
-# Build and Test
-TODO: Describe and show how to build your code and run the tests. 
+A structured Domain-Driven Design (DDD) project with separate layers for API, Services, Persistence, UX, and Common utilities.
+Includes Docker support, Azure pipelines, and Infrastructure as Code (IaC) via Terraform.
 
-# Contribute
-TODO: Explain how other users and developers can contribute to make your code better. 
+## Folder Structure
+```
+DomainDriven.sln
+.dockerignore
+.gitignore
+azure-pipeline
+azure-pipelines
+Dockerfile
+launchSettings
+pipeline
+/
+|-- Api/             # ASP.NET Core Web API project
+|-- Common/          # Shared utilities, models, helpers
+|-- IAC/             # Infrastructure as Code (Terraform scripts)
+|-- Persistence/     # Database access and repositories
+|-- Services/        # Application services and business logic
+|-- TestProject/     # Unit and Integration tests
+|-- UX/              # Frontend application (optional, could be Razor Pages, Blazor, etc.)
+```
 
-If you want to learn more about creating good readme files then refer the following [guidelines](https://docs.microsoft.com/en-us/azure/devops/repos/git/create-a-readme?view=azure-devops). You can also seek inspiration from the below readme files:
-- [ASP.NET Core](https://github.com/aspnet/Home)
-- [Visual Studio Code](https://github.com/Microsoft/vscode)
-- [Chakra Core](https://github.com/Microsoft/ChakraCore)
+---
+
+## Base URL
+```
+@baseUrl = http://localhost:5118/api
+```
+
+---
+
+## Endpoints
+
+### Get All Activities
+```http
+GET {{baseUrl}}/activity/get-all-activities
+```
+
+### Get Activity by ID
+```http
+GET {{baseUrl}}/activity/11111111-1111-1111-1111-111111111111
+```
+
+### Create New Activity
+```http
+POST {{baseUrl}}/activity/create-activity
+Accept: application/json
+Content-Type: application/json
+
+Body:
+{
+  "name": "test",
+  "fromAddress": "sender5@example.com",
+  "toEmailAddress": "user5@example.com",
+  "fromName": "Campaign5"
+}
+```
+
+### Update Existing Activity
+```http
+PUT {{baseUrl}}/activity/bd036630-3108-402d-b59a-d4e71522ac17
+Content-Type: application/json
+
+Body:
+{
+  "name": "test user",
+  "fromAddress": "test@test2.com",
+  "toEmailAddress": "test@test.com",
+  "fromName": "test",
+  "openedDate": "2025-04-23T21:30:00.000Z",
+  "bouncedDate": "2025-04-22T20:00:00.000Z"
+}
+```
+
+### Delete Activity
+```http
+DELETE {{baseUrl}}/activity/14799e05-51d4-4d6f-8e42-74b3cd45fa4a
+```
+
+---
+
+## Docker
+Build and run the API using Docker:
+
+```bash
+docker build -t domain-driven-api .
+docker run -p 5118:5118 domain-driven-api
+```
+
+---
+
+## Infrastructure as Code (IAC)
+- The `IAC/` folder contains Terraform scripts for provisioning cloud infrastructure (e.g., App, Database).
+- cd IAC
+- terraform init
+- terraform plan
+- terraform apply --auto-approve
+- this will build api project and great the api contianer and the sql db container
+- open a browser and go to http://localhost:80 
+
+---
+
+## Docker
+- A `Dockerfile` is available to containerize and run the API.
+- Build and run the Docker container:
+  ```bash
+  docker build -t movies-api .
+  docker run -p 80:80 movies-api
+  ```
+
+---
+ 
+
+## For HTTP File Execution
+More about HTTP files: [https://aka.ms/vs/httpfile](https://aka.ms/vs/httpfile)
+
+---
+
+## License
+This project is licensed under the MIT License.

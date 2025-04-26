@@ -12,7 +12,7 @@ Accept: application/json
 Content-Type: application/json
 
 { 
-  "name": "saeed",
+  "name": "test",
   "fromAddress": "sender5@example.com",
   "toEmailAddress": "user5@example.com",
   "fromName": "Campaign5"
@@ -23,10 +23,10 @@ PUT {{baseUrl}}/activity/bd036630-3108-402d-b59a-d4e71522ac17
 Content-Type: application/json
 
 {
-  "name":"Saeed Suleiman",
+  "name":"test user",
   "fromAddress":"test@test2.com",
   "toEmailAddress":"test@test.com",
-  "fromName":"Saeed",
+  "fromName":"test",
   "openedDate":"2025-04-23T21:30:00.000Z",
   "bouncedDate":"2025-04-22T20:00:00.000Z"
 }
